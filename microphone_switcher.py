@@ -15,11 +15,14 @@ APPINDICATOR_ID = 'MicrophoneSwitcher'
 
 class MicrophoneSwitcher:
     def __init__(self):
-        self.enabled = self.is_microphone_enabled()
         dirname = os.path.dirname(os.path.abspath(__file__))
         self.enabled_icon = os.path.join(dirname, './microphone.png')
         self.disabled_icon = os.path.join(dirname, './no-microphone.png')
-        self.indicator = appindicator.Indicator.new(APPINDICATOR_ID, self.enabled_icon, appindicator.IndicatorCategory.SYSTEM_SERVICES)
+        if self.is_microphone_enabled():
+            current_icon = self.enabled_icon
+        else:
+            current_icon = self.disabled_icon
+        self.indicator = appindicator.Indicator.new(APPINDICATOR_ID, current_icon, appindicator.IndicatorCategory.SYSTEM_SERVICES)
         self.indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
         self.indicator.set_menu(self.build_menu())
 
